@@ -1,20 +1,20 @@
 import Head from "next/head";
 
+import { SessionProvider } from "next-auth/react";
+
 import "../styles/globals.css";
 import "../styles/tailwind.css";
 
 import type { AppProps } from "next/app";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <title>CM3070 - Final Project</title>
-      </Head>
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
+  <SessionProvider session={session}>
+    <Head>
+      <title>CM3070 - Final Project</title>
+    </Head>
 
-      <Component {...pageProps} />
-    </>
-  );
-}
+    <Component {...pageProps} />
+  </SessionProvider>
+);
 
-export default MyApp;
+export default App;
