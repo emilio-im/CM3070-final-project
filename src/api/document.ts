@@ -1,5 +1,7 @@
-import { DATABASE_NAME, DOCUMENTS_COLLECTION } from "@constants/db";
+import updateDocument from "@lib/update-document";
 import clientPromise from "@services/mongodb";
+
+import { DATABASE_NAME, DOCUMENTS_COLLECTION } from "@constants/db";
 import { apiRequest } from "@utils/requests";
 
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -16,6 +18,11 @@ const handler = apiRequest(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
       const result = await getDocument(req.query.id as string);
+      return res.status(200).json({ ...result });
+    }
+
+    if (req.method === "PUT") {
+      const result = await updateDocument(req.query.id as string, req.body);
       return res.status(200).json({ ...result });
     }
 

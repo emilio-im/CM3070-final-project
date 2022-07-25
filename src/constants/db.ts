@@ -1,2 +1,2 @@
-export const DATABASE_NAME = "cm3070-final-project";
+export const DATABASE_NAME = "test";
 export const DOCUMENTS_COLLECTION = "documents";

@@ -1,5 +1,1 @@
-const Page = () => {
-  return <div>helloooo</div>;
-};
-
-export default Page;
+export { default, getServerSideProps } from "@views/Profile";
