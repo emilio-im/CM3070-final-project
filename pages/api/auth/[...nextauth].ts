@@ -26,6 +26,8 @@ export default NextAuth({
   callbacks: {
     async session({ session, user }) {
       session.username = user.username;
+      session.user = { ...user };
+
       return session;
     },
   },
