@@ -9,7 +9,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   if (!session) return { redirect: { permanent: false, destination: "/" } };
 
-  const document = await createDocument();
+  const document = await createDocument(
+    (session.user as Record<string, string>)?.id
+  );
 
   return {
     redirect: {
