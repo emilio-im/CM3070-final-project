@@ -138,6 +138,7 @@ const EditableBlock = ({ ...props }: Props) => {
 
       <ContentEditable
         className={[
+          "font-sans",
           "rounded-lg px-4 py-2 my-2",
           "border border-transparent focus:border-gray-200",
           "focus:bg-gray-100 outline-none hover:bg-gray-50",
