@@ -1,15 +1,10 @@
-import updateDocument from "@lib/update-document";
 import clientPromise from "@services/mongodb";
 
-import {
-  DATABASE_NAME,
-  DOCUMENTS_COLLECTION,
-  WORKSPACES_COLLECTION,
-} from "@constants/db";
+import { DATABASE_NAME, WORKSPACES_COLLECTION } from "@constants/db";
 import { apiRequest } from "@utils/requests";
+import { getSession } from "next-auth/react";
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
 
 const createWorkspace = async (req: NextApiRequest) => {
   const session = await getSession({ req });

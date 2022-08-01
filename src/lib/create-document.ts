@@ -22,6 +22,7 @@ const createDocument = async (userId: string) => {
   const res = await collection.insertOne({
     blocks: [],
     workspace: workspace?._id || null,
+    createdBy: userId,
   });
 
   return res.insertedId;

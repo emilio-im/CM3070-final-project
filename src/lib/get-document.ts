@@ -1,11 +1,13 @@
+import clientPromise from "@services/mongodb";
+
 import { DATABASE_NAME, DOCUMENTS_COLLECTION } from "@constants/db";
 import { ObjectId } from "mongodb";
-
-import clientPromise from "@services/mongodb";
 
 export type Document = {
   _id: string;
   blocks: unknown[];
+  createdBy: string;
+  workspace: string;
 };
 
 const getSingleDocument = async (id: string): Promise<Document> => {

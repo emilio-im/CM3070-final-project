@@ -1,5 +1,6 @@
 export const getCaretCoordinates = () => {
-  let x = 0, y = 0;
+  let x = 0,
+    y = 0;
   const selection = window.getSelection();
   if (selection?.rangeCount !== 0) {
     const range = selection?.getRangeAt(0).cloneRange();
@@ -12,3 +13,10 @@ export const getCaretCoordinates = () => {
   }
   return { x, y };
 };
+
+export const getHomeRedirection = () => ({
+  redirect: {
+    permanent: false,
+    destination: "/",
+  },
+});

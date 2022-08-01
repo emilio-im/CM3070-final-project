@@ -1,5 +1,6 @@
 import useStateCallback from "@hooks/set-callback-state";
 import EditableBlock from "@components/editable-block";
+import MainLayout from "@layout/main-layout";
 import debounce from "lodash/debounce";
 import React from "react";
 import axios from "axios";
@@ -7,7 +8,6 @@ import axios from "axios";
 import { uid } from "@utils/id";
 
 import type { Document } from "@lib/get-document";
-import MainLayout from "@layout/main-layout";
 
 const initialBlock = {
   id: uid(),
