@@ -17,7 +17,7 @@ const updateDocument = async (
 
   const results = await collection.updateOne(
     { _id: new ObjectId(id) },
-    { $set: { ...data } }
+    { $set: { ...data, updatedAt: new Date() } }
   );
 
   return JSON.parse(JSON.stringify({ ...results }));

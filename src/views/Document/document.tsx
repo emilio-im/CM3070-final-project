@@ -8,6 +8,7 @@ import axios from "axios";
 import { uid } from "@utils/id";
 
 import type { Document } from "@lib/get-document";
+import type { CancelTokenSource } from "axios";
 
 const initialBlock = {
   id: uid(),
@@ -23,17 +24,28 @@ const Page: React.FC<{ data: Document }> = ({ data }) => {
   );
 
   const blocksContainerRef = React.useRef<HTMLDivElement>(null);
+  const cancelToken = React.useRef<CancelTokenSource>();
 
   const saveInDatabase = React.useCallback(
     async (newBlocks: typeof initialBlock[]) => {
-      await axios.put(`/api/documents/${data._id}`, {
-        blocks: newBlocks,
-      });
+      if (typeof cancelToken?.current !== typeof undefined) {
+        cancelToken?.current?.cancel("Operation canceled due to new request.");
+      }
+
+      cancelToken.current = axios.CancelToken.source();
+
+      await axios.put(
+        `/api/documents/${data._id}`,
+        {
+          blocks: newBlocks,
+        },
+        { cancelToken: cancelToken.current?.token }
+      );
     },
-    [data._id]
+    [data._id, cancelToken]
   );
 
-  const refetch = React.useRef(debounce(saveInDatabase, 500)).current;
+  const refetch = React.useRef(debounce(saveInDatabase, 200)).current;
 
   const handleBlockChange = React.useCallback(
     ({ id, html, tag }: { id: string; html: string; tag: string }) => {

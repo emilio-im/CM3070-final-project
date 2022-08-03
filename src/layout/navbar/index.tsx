@@ -1,18 +1,17 @@
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useState } from "react";
-
+import DropdownSeparator from "./dropdown-separator";
 import * as Popover from "@radix-ui/react-popover";
+import DropdownButton from "./dropdown-button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import DropdownButton from "./dropdown-button";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import DropdownSeparator from "./dropdown-separator";
 
 const Auth: React.FC<unknown> = () => {
   const { data: session, status } = useSession();
   const { image, name } = session?.user || {};
+  const router = useRouter();
 
   const isLoggedIn = React.useMemo(() => status === "authenticated", [status]);
 
@@ -48,9 +47,10 @@ const Auth: React.FC<unknown> = () => {
           <Popover.Arrow className="fill-white" />
           {isLoggedIn ? (
             <>
-              <Link href="/documents/new" passHref>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a href="/documents/new">
                 <DropdownButton>New Document</DropdownButton>
-              </Link>
+              </a>
 
               <DropdownSeparator />
 
@@ -60,17 +60,27 @@ const Auth: React.FC<unknown> = () => {
 
               <DropdownSeparator />
 
+              <Link href="/profile" passHref>
+                <DropdownButton>Profile</DropdownButton>
+              </Link>
+
               <Link href="/settings" passHref>
                 <DropdownButton>Settings</DropdownButton>
               </Link>
               <DropdownButton onClick={() => signOut()}>Log Out</DropdownButton>
             </>
           ) : (
-            <DropdownButton
-              onClick={() => signIn("github", { callbackUrl: `/profile` })}
-            >
-              Log In with Github
-            </DropdownButton>
+            <>
+              <DropdownButton
+                onClick={() => signIn("github", { callbackUrl: `/profile` })}
+              >
+                Log In with Github
+              </DropdownButton>
+
+              <DropdownButton aria-disabled disabled>
+                (Soon) Log In with email
+              </DropdownButton>
+            </>
           )}
         </Popover.Content>
       </Popover.Root>
@@ -78,50 +88,13 @@ const Auth: React.FC<unknown> = () => {
   );
 };
 
-const Navbar: React.FC<unknown> = () => {
-  const [loading, setLoading] = useState(false);
-
-  return (
-    <nav
-      className="py-4 mx-auto max-w-2xl w-full px-4 md:px-0 flex"
-      aria-label="Navbar"
-    >
-      <Auth />
-      {/* {status !== "loading" &&
-        (session?.user ? (
-          <Link href={`/${session.username}`}>
-            <a className="w-8 h-8 rounded-full overflow-hidden">
-              <Image
-                src={
-                  session.user.image ||
-                  `https://avatar.tobi.sh/${session.user.name}`
-                }
-                alt={session.user.name || "User"}
-                width={300}
-                height={300}
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PYsGHDfwAHNAMQumvbogAAAABJRU5ErkJggg=="
-              />
-            </a>
-          </Link>
-        ) : (
-          <button
-            disabled={loading}
-            onClick={() => {
-              setLoading(true);
-              signIn("github", { callbackUrl: `/profile` });
-            }}
-            className={`${
-              loading
-                ? "bg-gray-200 border-gray-300"
-                : "bg-black hover:bg-white border-black"
-            } w-36 h-8 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
-          >
-            {loading ? "Loading..." : "Log in with GitHub"}
-          </button>
-        ))} */}
-    </nav>
-  );
-};
+const Navbar: React.FC<unknown> = () => (
+  <nav
+    className="py-4 mx-auto max-w-2xl w-full px-4 md:px-0 flex"
+    aria-label="Navbar"
+  >
+    <Auth />
+  </nav>
+);
 
 export default Navbar;

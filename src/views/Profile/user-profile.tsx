@@ -12,15 +12,15 @@ const Page: React.FC<Props> = ({ documents }) => {
   return (
     <MainLayout>
       <div>
-        <h1>Your documents</h1>
+        <h1 className="text-lg font-bold font-sans">Your documents</h1>
       </div>
 
-      <ul>
+      <ul className="my-2">
         {documents.map((document) => (
           <Link key={document._id} href={`/documents/${document._id}`} passHref>
             <a>
-              <li>
-                {(document.blocks as Record<string, string>[])?.[0].html ||
+              <li className="text-sm font-sans my-2 list-disc">
+                {(document.blocks as Record<string, string>[])?.[0]?.html ||
                   "New Document"}
               </li>
             </a>

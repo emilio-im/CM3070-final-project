@@ -20,6 +20,21 @@ type Props = {
   document: Document;
 };
 
+/**
+ * Determines if a certain user can read a specific document.
+ *
+ * @description
+ *  This function receives a user id and the already structured document (using
+ *  Database's schema - it is also typed so we can get only the fields we'll use
+ *  in case the schema changes). This function gets all the workspaces where the
+ *  user is member and checks:
+ *    1. if any of these workspaces is the document's workspace
+ *    2. there's no workspace and the user has created the document (this is the
+ *       case where it is within the personal workspace).
+ * @param { user: string, document: Document } param: user id and document to check
+ * @returns { Promise<boolean> }
+ *  true if user can read the document or false if not
+ */
 const canUserReadDocument = async ({
   user,
   document,
@@ -38,7 +53,7 @@ const canUserReadDocument = async ({
 
   return (
     workspaces.some((workspace) => workspace.members.includes(user)) ||
-    document.createdBy === user
+    (!document.workspace && document.createdBy === user)
   );
 };
 

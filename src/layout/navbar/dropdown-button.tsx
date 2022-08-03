@@ -2,7 +2,10 @@ import React from "react";
 
 const DropdownButton = React.forwardRef(
   (
-    { children, ...props }: React.HTMLAttributes<HTMLButtonElement>,
+    {
+      children,
+      ...props
+    }: React.HTMLAttributes<HTMLButtonElement> & { disabled?: boolean },
     ref: any
   ) => (
     <button
@@ -13,6 +16,7 @@ const DropdownButton = React.forwardRef(
         "w-56 py-2 px-4 md:px-6",
         "hover:bg-gray-50 hover:border-gray-100",
         "text-sm text-left text-gray-600 hover:text-gray-900",
+        "disabled:text-gray-300 disabled:hover:bg-gray-50 disabled:cursor-not-allowed",
       ].join(" ")}
     >
       {children}
