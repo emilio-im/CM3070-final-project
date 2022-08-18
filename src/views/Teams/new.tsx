@@ -1,3 +1,4 @@
+import MainLayout from "@layout/main-layout";
 import React from "react";
 import axios from "axios";
 
@@ -18,7 +19,7 @@ const Page = () => {
   }, [value]);
 
   return (
-    <div>
+    <MainLayout>
       <input
         onChange={handleChange}
         value={value}
@@ -28,7 +29,7 @@ const Page = () => {
       <button type="button" onClick={handleSubmit}>
         Create
       </button>
-    </div>
+    </MainLayout>
   );
 };
 

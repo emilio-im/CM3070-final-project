@@ -51,7 +51,14 @@ const EditableBlock = ({ ...props }: Props) => {
   );
 
   React.useEffect(() => {
-    if (props.html !== html || props.tag !== tag) {
+    setHtml(props.html);
+  }, [props.html]);
+
+  React.useEffect(() => {
+    if (
+      (props.html !== html || props.tag !== tag) &&
+      document.activeElement === ref.current
+    ) {
       props.onChange({ id: props.id, html, tag });
     }
   }, [html, tag, props, ref]);
@@ -127,7 +134,7 @@ const EditableBlock = ({ ...props }: Props) => {
   );
 
   return (
-    <div className="relative">
+    <div className="relative" data-testid="editable-block-container">
       {isSelectMenuOpen ? (
         <ItemsMenu
           position={selectMenuPosition}
@@ -150,6 +157,7 @@ const EditableBlock = ({ ...props }: Props) => {
         onChange={onChange}
         onKeyDown={onKeyDownHandler}
         onKeyUp={keyUpHandler}
+        data-testid={`block-${tag}-${props.id}`}
       />
     </div>
   );
