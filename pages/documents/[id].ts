@@ -1,6 +1,7 @@
 import canUserReadDocument from "@lib/guards/can-user-read";
 import getSingleDocument from "@lib/get-document";
 
+import { getAllUserWorkspaces } from "@lib/get-all-user-workspaces";
 import { getHomeRedirection } from "@utils/index";
 import { getSession } from "next-auth/react";
 import { isIdValid } from "@utils/id";
@@ -18,15 +19,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!session || !isIdValid(id)) return getHomeRedirection();
 
+  const userId = (session.user as Record<string, string>)?.id;
+
   const result = await getSingleDocument(id);
   const hasPermission = await canUserReadDocument({
     document: result,
-    user: (session.user as Record<string, string>)?.id,
+    user: userId,
   });
 
   if (!hasPermission) return getHomeRedirection();
 
-  return { props: { data: result } };
+  const userWorkspaces = await getAllUserWorkspaces(userId);
+
+  return {
+    props: {
+      data: result,
+      workspaces: JSON.parse(JSON.stringify(userWorkspaces)),
+    },
+  };
 };
 
 export { default } from "@views/Document/document";

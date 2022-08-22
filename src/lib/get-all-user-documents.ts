@@ -5,33 +5,47 @@ import {
   DOCUMENTS_COLLECTION,
   WORKSPACES_COLLECTION,
 } from "@constants/db";
-
-import type { Document } from "./get-document";
 import { ObjectID } from "bson";
 
-const getAllUserDocuments = async (id: string): Promise<Document[]> => {
+import type { Document } from "./get-document";
+import { getAllUserWorkspaces } from "./get-all-user-workspaces";
+
+export type EnhancedDocument = Omit<Document, "workspace"> & {
+  workspace: { id: string; name: string };
+};
+
+const getAllUserDocuments = async (id: string): Promise<EnhancedDocument[]> => {
   const client = await clientPromise;
   const collection = client.db(DATABASE_NAME).collection(DOCUMENTS_COLLECTION);
 
-  const workspaces = await client
-    .db(DATABASE_NAME)
-    .collection(WORKSPACES_COLLECTION)
-    .find<{ _id: ObjectID; members: string[] }>({
-      $where: function () {
-        return this.members.includes(id);
-      },
-    })
-    .toArray();
+  const workspaces = await getAllUserWorkspaces(id);
 
   const workspacesIds = workspaces.map(
     (workspace) => new ObjectID(workspace._id.toString())
   );
 
-  const results = await collection
+  const res = await collection
     .find<Document>({
       $or: [{ createdBy: id }, { workspace: { $in: workspacesIds } }],
     })
     .toArray();
+
+  /**
+   * @description
+   *  Map all documents and "enhance" workspace object assigning it the id and
+   *  the workspace's name
+   */
+  const results = res.map((document) => ({
+    ...document,
+    workspace: {
+      id: document.workspace,
+      name:
+        workspaces.find(
+          (workspace) =>
+            workspace._id.toString() === document.workspace.toString()
+        )?.name || "Workspace",
+    },
+  }));
 
   return JSON.parse(JSON.stringify(results));
 };

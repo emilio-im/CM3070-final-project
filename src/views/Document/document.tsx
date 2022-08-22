@@ -1,3 +1,4 @@
+import WorkspaceSelector from "./components/workspace-selector";
 import ReactionSelector from "@components/reaction-selector";
 import useStateCallback from "@hooks/set-callback-state";
 import FlyingReaction from "@components/flying-reaction";
@@ -59,6 +60,7 @@ type ReactionEvent = {
 
 import type { Document } from "@lib/get-document";
 import type { CancelTokenSource } from "axios";
+import type { Workspace } from "@lib/get-all-user-workspaces";
 
 const BROADCAST_EVENT = {
   document_change: "DOCUMENT_CHANGE",
@@ -70,7 +72,9 @@ const initialBlock = {
   tag: "h1",
 };
 
-const Wrapper: React.FC<{ data: Document }> = ({ data }) => {
+type Props = { data: Document; workspaces: Workspace[] };
+
+const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
   const [blocks, setBlocks] = useStateCallback<typeof initialBlock[]>(
     data?.blocks?.length
       ? (data.blocks as typeof initialBlock[])
@@ -271,6 +275,12 @@ const Wrapper: React.FC<{ data: Document }> = ({ data }) => {
 
   return (
     <MainLayout>
+      <WorkspaceSelector
+        workspaces={workspaces}
+        initialWorkspace={data.workspace}
+        documentId={data._id}
+      />
+
       <div
         ref={blocksContainerRef}
         className="relative h-screen w-full touch-none"
@@ -382,8 +392,8 @@ const Wrapper: React.FC<{ data: Document }> = ({ data }) => {
   );
 };
 
-const Page: React.FC<{ data: Document }> = ({ data }) => {
-  const roomId = React.useMemo(() => data._id, [data._id]);
+const Page: React.FC<Props> = ({ ...props }) => {
+  const roomId = React.useMemo(() => props.data._id, [props.data._id]);
 
   return (
     <RoomProvider
@@ -393,7 +403,7 @@ const Page: React.FC<{ data: Document }> = ({ data }) => {
         message: "",
       })}
     >
-      <Wrapper data={data} />
+      <Wrapper {...props} />
     </RoomProvider>
   );
 };
