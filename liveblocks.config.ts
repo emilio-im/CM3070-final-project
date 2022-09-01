@@ -12,7 +12,6 @@ type Presence = {
     x: number;
     y: number;
   } | null;
-  message: string;
 };
 
 type Storage = {};
