@@ -4,9 +4,7 @@ import { createRoomContext } from "@liveblocks/react";
 import type { BaseUserMeta } from "@liveblocks/client";
 
 const client = createClient({
-  publicApiKey:
-    process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY! ||
-    "pk_live_xg8p7s0qyryHwQ5pqmVls_TL",
+  publicApiKey: process.env.LIVEBLOCKS_PUBLIC_KEY!,
 });
 
 type Presence = {
@@ -17,10 +15,7 @@ type Presence = {
   message: string;
 };
 
-type Storage = {
-  // animals: LiveList<string>,
-  // ...
-};
+type Storage = {};
 
 type UserMeta = BaseUserMeta;
 
