@@ -23,7 +23,6 @@ const COLORS = ["#DC2626", "#D97706", "#059669", "#7C3AED", "#DB2777"];
 
 enum CursorMode {
   Hidden,
-  Chat,
   ReactionSelector,
   Reaction,
 }
@@ -31,11 +30,6 @@ enum CursorMode {
 type CursorState =
   | {
       mode: CursorMode.Hidden;
-    }
-  | {
-      mode: CursorMode.Chat;
-      message: string;
-      previousMessage: string | null;
     }
   | {
       mode: CursorMode.ReactionSelector;
@@ -284,12 +278,7 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
       <div
         ref={blocksContainerRef}
         className="relative h-screen w-full touch-none"
-        style={{
-          cursor:
-            state.mode === CursorMode.Chat
-              ? "none"
-              : "url(cursor.svg) 0 0, auto",
-        }}
+        style={{ cursor: "url(cursor.svg) 0 0, auto" }}
         onPointerMove={(event) => {
           event.preventDefault();
           if (cursor == null || state.mode !== CursorMode.ReactionSelector) {
