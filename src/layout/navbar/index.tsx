@@ -64,9 +64,9 @@ const Auth: React.FC<unknown> = () => {
                 <DropdownButton>Profile</DropdownButton>
               </Link>
 
-              <Link href="/settings" passHref>
-                <DropdownButton>Settings</DropdownButton>
-              </Link>
+              <DropdownButton aria-disabled disabled>
+                (Soon) Settings
+              </DropdownButton>
               <DropdownButton onClick={() => signOut()}>Log Out</DropdownButton>
             </>
           ) : (
