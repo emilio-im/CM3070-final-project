@@ -121,7 +121,7 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
   React.useEffect(() => {
     function onKeyUp(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        updateMyPresence({ message: "" });
+        updateMyPresence({});
         setState({ mode: CursorMode.Hidden });
       } else if (e.key === "Control") {
         setState({ mode: CursorMode.ReactionSelector });
@@ -281,11 +281,17 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
         style={{ cursor: "url(cursor.svg) 0 0, auto" }}
         onPointerMove={(event) => {
           event.preventDefault();
+
           if (cursor == null || state.mode !== CursorMode.ReactionSelector) {
             updateMyPresence({
               cursor: {
                 x: Math.round(event.clientX),
-                y: Math.round(event.clientY),
+                y: Math.round(
+                  // mouse Y position + pageYOffset (scroll offset) - navbar and cursor 
+                  // height
+                  event.nativeEvent?.y + window.pageYOffset - 130 ||
+                    event.clientY
+                ),
               },
             });
           }
@@ -362,7 +368,6 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
               color={COLORS[connectionId % COLORS.length]}
               x={presence.cursor.x}
               y={presence.cursor.y}
-              message={""}
             />
           );
         })}
@@ -389,7 +394,6 @@ const Page: React.FC<Props> = ({ ...props }) => {
       id={roomId}
       initialPresence={() => ({
         cursor: null,
-        message: "",
       })}
     >
       <Wrapper {...props} />
