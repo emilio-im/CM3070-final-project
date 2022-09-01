@@ -1,15 +1,41 @@
-import Layout from "@layout/main-layout";
-import Page from "@views/Editor";
-import Head from "next/head";
+import getAllUserDocuments from "@lib/get-all-user-documents";
+import HomePage from "@views/Home";
 
-const MainPage = () => (
-  <Layout>
-    <Head>
-      <title>CM3070 - Final Project</title>
-    </Head>
+import { getSession } from "next-auth/react";
 
-    <Page />
-  </Layout>
-);
+import type { GetServerSideProps } from "next";
 
-export default MainPage;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/guest",
+      },
+    };
+  }
+
+  const result = await getAllUserDocuments(
+    (session.user as Record<string, string>)?.id
+  );
+
+  const sorted = result
+    .filter((document) => !!document.updatedAt)
+    .sort(
+      (a, b) =>
+        (typeof b?.updatedAt === "string"
+          ? new Date(b?.updatedAt)
+          : undefined || new Date()
+        )?.getTime() -
+        (typeof a?.updatedAt === "string"
+          ? new Date(a?.updatedAt)
+          : a.updatedAt || new Date()
+        )?.getTime()
+    );
+
+  return { props: { documents: sorted.slice(0, 5) } };
+};
+
+export default HomePage;
