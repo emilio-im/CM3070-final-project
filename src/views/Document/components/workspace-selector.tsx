@@ -34,6 +34,8 @@ const WorkspaceSelector: React.FC<Props> = ({
     [documentId]
   );
 
+  if (!workspaces?.length) return null;
+
   return (
     <div className="my-4 text-end">
       <Select.Root value={workspace} onValueChange={updateWorkspace}>

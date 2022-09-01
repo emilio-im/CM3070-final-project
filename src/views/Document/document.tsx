@@ -287,7 +287,7 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
               cursor: {
                 x: Math.round(event.clientX),
                 y: Math.round(
-                  // mouse Y position + pageYOffset (scroll offset) - navbar and cursor 
+                  // mouse Y position + pageYOffset (scroll offset) - navbar and cursor
                   // height
                   event.nativeEvent?.y + window.pageYOffset - 130 ||
                     event.clientY
@@ -308,7 +308,11 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
           updateMyPresence({
             cursor: {
               x: Math.round(event.clientX),
-              y: Math.round(event.clientY),
+              y: Math.round(
+                // mouse Y position + pageYOffset (scroll offset) - navbar and cursor
+                // height
+                event.nativeEvent?.y + window.pageYOffset - 130 || event.clientY
+              ),
             },
           });
           setState((state) =>
@@ -337,7 +341,7 @@ const Wrapper: React.FC<Props> = ({ data, workspaces }) => {
 
         {cursor && (
           <div
-            className="absolute top-0 left-0"
+            className="absolute top-0 left-0 z-50"
             style={{
               transform: `translateX(${cursor.x}px) translateY(${cursor.y}px)`,
             }}
