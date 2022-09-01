@@ -3,8 +3,6 @@ import { createRoomContext } from "@liveblocks/react";
 
 import type { BaseUserMeta } from "@liveblocks/client";
 
-console.log(process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY || "")
-
 const client = createClient({
   publicApiKey: process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY || "",
 });
