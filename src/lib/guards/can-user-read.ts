@@ -41,19 +41,19 @@ const canUserReadDocument = async ({
 }: Props): Promise<boolean> => {
   const client = await clientPromise;
   const collection = client.db(DATABASE_NAME).collection(WORKSPACES_COLLECTION);
-  const workspaces = await collection
-    .find<Workspace>({
-      $where: function () {
-        return this.members.includes(user);
-      },
-    })
-    .toArray();
-
-  if (!workspaces?.length) return false;
+  const workspaces = (
+    await collection
+      .find<Workspace>({
+        $where: function () {
+          return this.members.includes(user);
+        },
+      })
+      .toArray()
+  ).filter((workspace) => workspace.members.includes(user));
 
   return (
     workspaces.some((workspace) => workspace.members.includes(user)) ||
-    (!document.workspace && document.createdBy === user)
+    document.createdBy === user
   );
 };
 
