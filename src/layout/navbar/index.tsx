@@ -6,21 +6,20 @@ import Link from "next/link";
 import React from "react";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const Auth: React.FC<unknown> = () => {
   const { data: session, status } = useSession();
-  const { image, name } = session?.user || {};
-  const router = useRouter();
+  const { image, picture, name } = session?.user || {};
 
   const isLoggedIn = React.useMemo(() => status === "authenticated", [status]);
 
   const profileSrc = React.useMemo(
     () =>
       image ||
+      picture ||
       `https://avatar.tobi.sh/${name}` ||
       "https://avatar.tobi.sh/logged-out",
-    [image, name]
+    [image, name, picture]
   );
 
   return (
@@ -47,6 +46,16 @@ const Auth: React.FC<unknown> = () => {
           <Popover.Arrow className="fill-white" />
           {isLoggedIn ? (
             <>
+              <Link href="/" passHref>
+                <DropdownButton>Home</DropdownButton>
+              </Link>
+
+              <Link href="/profile" passHref>
+                <DropdownButton>Profile</DropdownButton>
+              </Link>
+
+              <DropdownSeparator />
+
               {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a href="/documents/new">
                 <DropdownButton>New Document</DropdownButton>
@@ -60,13 +69,10 @@ const Auth: React.FC<unknown> = () => {
 
               <DropdownSeparator />
 
-              <Link href="/profile" passHref>
-                <DropdownButton>Profile</DropdownButton>
-              </Link>
-
               <DropdownButton aria-disabled disabled>
                 (Soon) Settings
               </DropdownButton>
+
               <DropdownButton onClick={() => signOut()}>Log Out</DropdownButton>
             </>
           ) : (
@@ -75,6 +81,18 @@ const Auth: React.FC<unknown> = () => {
                 onClick={() => signIn("github", { callbackUrl: `/profile` })}
               >
                 Log In with Github
+              </DropdownButton>
+
+              <DropdownButton
+                onClick={() =>
+                  signIn("credentials", {
+                    email: "jsmith@example.com",
+                    password: "123123",
+                    callbackUrl: `/profile`,
+                  })
+                }
+              >
+                Log In (mock account)
               </DropdownButton>
 
               <DropdownButton aria-disabled disabled>
