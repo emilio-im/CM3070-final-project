@@ -1,8 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## CM3070 - Final Project
 
-## Getting Started
+Project developed as prototype for the UoL's Final Project (CM3070).
+To check the code running in development open [cm3070-final-project.vercel.app](https://cm3070-final-project.vercel.app).
 
-First, run the development server:
+### How to run
+
+First, rename the `.env.example` file to `.env` and fill the values with the ones from the the final report (appendix).
+
+*Notes: to run the app locally these values need to be defined:*
+
+```
+NEXTAUTH_SECRET=""
+NEXTAUTH_URL=""
+GITHUB_CLIENT_SECRET=""
+GITHUB_CLIENT_ID=""
+MONGODB_URI=""
+NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY=""
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -10,25 +26,16 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+And open [http://localhost:3000](http://localhost:3000) to check the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Login
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+I have added a "mock" and fake account to check all the features locally. To sign in with that account you need press the "Log In (mock account)" button inside the navbar.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Pages
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Home](http://localhost:3000/)
+- [Profile](http://localhost:3000/profile)
+- [New Document](http://localhost:3000/documents/new)
+- [New Workspace](http://localhost:3000/workspaces/new)
+- Document details
