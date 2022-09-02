@@ -8,6 +8,7 @@ export type Document = {
   blocks: unknown[];
   createdBy: string;
   workspace: string;
+  updatedAt?: Date | string;
 };
 
 const getSingleDocument = async (id: string): Promise<Document> => {
