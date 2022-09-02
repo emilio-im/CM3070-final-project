@@ -1,18 +1,21 @@
 import useStateCallback from "@hooks/set-callback-state";
 import EditableBlock from "@components/editable-block";
+import MainLayout from "@layout/main-layout";
 import React from "react";
 
 import { uid } from "@utils/id";
 
 const initialBlock = {
   id: uid(),
-  html: "",
+  html: "Edit me...",
   tag: "h1",
 };
 
 const EditorPage = () => {
   const [blocks, setBlocks] = useStateCallback<typeof initialBlock[]>([
     initialBlock,
+    { id: uid(), html: "This is a header", tag: "h2" },
+    { id: uid(), html: "And this part of the body", tag: "p" },
   ]);
 
   const blocksContainerRef = React.useRef<HTMLDivElement>(null);
@@ -73,17 +76,25 @@ const EditorPage = () => {
   );
 
   return (
-    <div ref={blocksContainerRef}>
-      {blocks.map((block) => (
-        <EditableBlock
-          {...block}
-          key={block.id}
-          onChange={handleBlockChange}
-          addBlock={addBlock}
-          deleteBlock={deleteBlock}
-        />
-      ))}
-    </div>
+    <MainLayout>
+      <div className="mb-4">
+        <h1 className="font-sans font-bold text-xl">
+          Test the document component
+        </h1>
+      </div>
+
+      <div ref={blocksContainerRef}>
+        {blocks.map((block) => (
+          <EditableBlock
+            {...block}
+            key={block.id}
+            onChange={handleBlockChange}
+            addBlock={addBlock}
+            deleteBlock={deleteBlock}
+          />
+        ))}
+      </div>
+    </MainLayout>
   );
 };
 
