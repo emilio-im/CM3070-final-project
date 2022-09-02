@@ -25,5 +25,7 @@ export const getAllUserWorkspaces = async (
     })
     .toArray();
 
-  return result;
+  // @TODO: remove this filter when $where function handles 100% of the cases
+  // @see https://linuxhint.com/where-operator-mongodb/
+  return result.filter((workspace) => workspace.members.includes(userId));
 };

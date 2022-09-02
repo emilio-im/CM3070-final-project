@@ -24,11 +24,19 @@ const getAllUserDocuments = async (id: string): Promise<EnhancedDocument[]> => {
     (workspace) => new ObjectID(workspace._id.toString())
   );
 
-  const res = await collection
-    .find<Document>({
-      $or: [{ createdBy: id }, { workspace: { $in: workspacesIds } }],
-    })
-    .toArray();
+  const res = (
+    await collection
+      .find<Document>({
+        $or: [{ createdBy: id }, { workspace: { $in: workspacesIds } }],
+      })
+      .toArray()
+  ).filter(
+    (document) =>
+      document.createdBy === id ||
+      workspacesIds
+        .map((workspaceId) => workspaceId.toString())
+        .includes(document.workspace)
+  );
 
   /**
    * @description
@@ -42,7 +50,7 @@ const getAllUserDocuments = async (id: string): Promise<EnhancedDocument[]> => {
       name:
         workspaces.find(
           (workspace) =>
-            workspace._id.toString() === document.workspace.toString()
+            workspace._id.toString() === document?.workspace?.toString()
         )?.name || "Workspace",
     },
   }));
