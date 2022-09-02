@@ -36,7 +36,7 @@ const Page: React.FC<Props> = ({ documents }) => {
           <div key={`workspace-item-${workspace.id}`}>
             <h2 className="font-sans font-bold text-lg">{workspace.name}</h2>
 
-            <ul className="my-2 px-4">
+            <ul className="mt-2 mb-8 px-4">
               {workspace.documents.map((document) => (
                 <Link
                   key={document._id}
